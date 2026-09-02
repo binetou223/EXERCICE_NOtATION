@@ -1,5 +1,5 @@
 <?php       
-
+namespace App\Service;
         class DateUtils
         {
             public static function convertirDate(string|null $date, string $nomChamp): \DateTimeImmutable
