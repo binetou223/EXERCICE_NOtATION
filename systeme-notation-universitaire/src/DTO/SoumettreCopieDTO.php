@@ -6,7 +6,9 @@ namespace App\DTO;
             public float $noteBrute,
             public \DateTimeImmutable $dateDepot,
             public \DateTimeImmutable $dateLimite
-        ) {}
+        ) {
+            
+        }
 
 
             
