@@ -1,0 +1,15 @@
+{
+    "name": "binetou/exercice-notation",
+    "autoload": {
+        "psr-4": {
+            "Binetou\\ExerciceNotation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Binetou",
+            "email": "binetoudiasn@gmail.com"
+        }
+    ],
+    "require": {}
+}
