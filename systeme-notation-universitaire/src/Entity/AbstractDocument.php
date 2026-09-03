@@ -1,10 +1,10 @@
 <?php
-
+namespace App\Entity;
 abstract class AbstractDocument {
     protected ?int $id = null;
-    protected string $dateDepot;
+    protected \DateTimeImmutable $dateDepot;
 
-    protected function __construct(string $dateDepot, ?int $id = null){
+    protected function __construct(\DateTimeImmutable $dateDepot, ?int $id = null){
         $this->id = $id;
         $this->dateDepot = $dateDepot;
     }
@@ -16,7 +16,7 @@ abstract class AbstractDocument {
         $this->id = $id;
     }
 
-    public function getDateDepot(): string{
+    public function getDateDepot(): \DateTimeImmutable{
         return $this->dateDepot;
     }
 }

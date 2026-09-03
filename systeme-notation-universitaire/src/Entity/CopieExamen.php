@@ -1,15 +1,18 @@
 <?php
+namespace App\Entity;
+use App\Entity\AbstractDocument;
+use App\Service\NoteValidator;
 class CopieExamen extends AbstractDocument
 {
     private float $noteBrute;
     private float $noteFinale;
     private bool $penaliteAppliquee;
-    private string $dateLimite;
+    private \DateTimeImmutable $dateLimite;
 
-    public function __construct(string $dateDepot, float $noteBrute, bool $penaliteAppliquee, string $dateLimite, ?int $id = null)
+    public function __construct(\DateTimeImmutable $dateDepot, float $noteBrute, bool $penaliteAppliquee, \DateTimeImmutable $dateLimite, ?int $id = null)
     {
         parent::__construct($dateDepot, $id);
-        $this->verifierNote($noteBrute);
+        NoteValidator::validate($noteBrute);
         $this->noteBrute = $noteBrute;
         $this->penaliteAppliquee = $penaliteAppliquee;
         $this->dateLimite = $dateLimite;
@@ -31,7 +34,7 @@ class CopieExamen extends AbstractDocument
     }
     public function setNoteBrute(float $noteBrute): void
     {
-        $this->verifierNote($noteBrute);
+        NoteValidator::validate($noteBrute);
         $this->noteBrute = $noteBrute;
     }
     public function getNoteFinale(): float
@@ -46,10 +49,12 @@ class CopieExamen extends AbstractDocument
     {
         $this->penaliteAppliquee = $penaliteAppliquee;
     }
-    private function verifierNote(float $note): void
+    public function getDateLimite(): \DateTimeImmutable
     {
-        if ($note < 0 || $note > 20) {
-            throw new InvalidArgumentException("La note doit être comprise entre 0 et 20.");
-        }
+        return $this->dateLimite;
     }
+    public function setDateLimite(\DateTimeImmutable $dateLimite): void{
+        $this->dateLimite = $dateLimite;
+    }
+   
 }
