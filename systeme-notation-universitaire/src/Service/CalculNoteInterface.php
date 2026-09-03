@@ -1,0 +1,8 @@
+<?php
+
+namespace App\Service;
+
+interface CalculNoteInterface
+{
+    public function calculerNote(float $noteBrute, bool $penaliteAppliquee): float;
+}
