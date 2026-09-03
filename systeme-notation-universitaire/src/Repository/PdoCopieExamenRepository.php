@@ -5,8 +5,16 @@ namespace App\Entity;
 use App\Repository\CopieExamenRepositoryInterface;
 use App\Repository\AbstractRepository;
 
-class CopieExamenRepository extends AbstractRepository implements CopieExamenRepositoryInterface
+class PdoCopieExamenRepository extends AbstractRepository implements CopieExamenRepositoryInterface
 {
+   private static ?PdoCopieExamenRepository $instance = null;
+    public static function getInstance(\PDO $pdo): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self($pdo);
+        }
+        return self::$instance;
+    }
     public function __construct(\PDO $db)
     {
         parent::__construct($db);
