@@ -1,22 +1,35 @@
 <?php
+
 namespace App\Service;
-use App\DTO\SoumettreCopieDTO;
-use App\Repository\CopieExamenRepositoryInterface;
 use App\Entity\CopieExamen;
+use App\Repository\CopieExamenRepositoryInterface;
 use App\Service\CalculNoteInterface;
-class SoumissionCopieService{
-     public function __construct(
-        private CalculNoteInterface $calculateur,
-        private CopieExamenRepositoryInterface $repository
-    ) {}
+use App\DTO\SoumettreCopieDTO;
+final class SoumissionCopieService
+{
+    //private readonly CopieExamenRepositoryInterface $copieExamenRepository;
+    public function __construct(
+    
+        private readonly CopieExamenRepositoryInterface $copieExamenRepository
+    ) {
+        //$this->copieExamenRepository = PdoCopieExamenRepository::getInstance(new \PDO('sqlite:' . __DIR__ . '/../../data/copie_examen.db'));
+    }
 
-    public function soumettre(SoumettreCopieDTO $dto): CopieExamen
-    {
-        $noteFinale = $this->calculateur->calculerNote($dto->noteBrute, $dto->dateDepot > $dto->dateLimite);
+    public function soumettre(
+        CalculNoteInterface $calculNote,
+        SoumettreCopieDTO $dto
+    ): CopieExamen {
+        $enRetard = $calculNote->estEnRetard($dto->dateDepot, $dto->dateLimite);
+        $noteFinale = $calculNote->calculerNoteFinale($dto->noteBrute, $enRetard);
 
-        $copie = new CopieExamen($dto->dateDepot, $dto->noteBrute, $noteFinale, $dto->dateLimite);
-        return $this->repository->save($copie);
+        $copieExamen = new CopieExamen(
+            $dto->dateDepot,
+            $dto->noteBrute,
+            $enRetard,
+            $dto->dateLimite
+        );
+        $copieExamen->setNoteFinale($noteFinale);
+
+        return $this->copieExamenRepository->save($copieExamen);
     }
 }
-
-

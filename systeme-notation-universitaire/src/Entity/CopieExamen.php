@@ -41,6 +41,11 @@ class CopieExamen extends AbstractDocument
     {
         return $this->noteFinale;
     }
+    public function setNoteFinale(float $noteFinale): void
+    {
+        NoteValidator::validate($noteFinale);
+        $this->noteFinale = $noteFinale;
+    }
     public function isPenaliteAppliquee(): bool
     {
         return $this->penaliteAppliquee;

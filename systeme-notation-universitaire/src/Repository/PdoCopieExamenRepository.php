@@ -11,20 +11,23 @@ class PdoCopieExamenRepository extends AbstractRepository implements CopieExamen
     {
         parent::__construct($db);
     }
-
-    public function save(CopieExamen $copieExamen): int
+    public function save(CopieExamen $copieExamen): CopieExamen
     {
-        $sql = "INSERT INTO notation (date_depot, note_brute, penalite_appliquee, date_limite,note_finale)
+         $sql = "INSERT INTO notation (date_depot, note_brute, penalite_appliquee, date_limite,note_finale)
        VALUES (:dateDepot, :noteBrute, :penaliteAppliquee, :dateLimite, :noteFinale)";
-        $this->executeUpdate($sql, [
-            ':dateDepot' => $copieExamen->getDateDepot(),
-            ':noteBrute' => $copieExamen->getNoteBrute(),
-            ':penaliteAppliquee' => $copieExamen->isPenaliteAppliquee() ? 1 : 0,
-            ':dateLimite' => $copieExamen->getDateLimite(),
-            ':noteFinale' => $copieExamen->getNoteFinale()
+        $id = $this->executeUpdate($sql, [
+            'dateDepot' => $copieExamen->getDateDepot()->format('Y-m-d H:i:s'),
+            'noteBrute' => $copieExamen->getNoteBrute(),
+            'noteFinale' => $copieExamen->getNoteFinale(),
+            'penaliteAppliquee' => $copieExamen->isPenaliteAppliquee() ? 1 : 0,
+            'dateLimite' => $copieExamen->getDateLimite()->format('Y-m-d H:i:s'),
         ]);
-        return (int)$this->db->lastInsertId();
+
+        $copieExamen->setId((int) $id);
+
+        return $copieExamen;
     }
+
     public function findById(int $id): ?CopieExamen
     {
         $sql = "SELECT * FROM notation WHERE id = :id";
